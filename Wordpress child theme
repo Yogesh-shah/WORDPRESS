@@ -1,0 +1,23 @@
+<?php
+
+add_action( 'wp_enqueue_scripts', 'my_theme_enqueue_styles' );
+
+function my_theme_enqueue_styles() {
+	// wp_enqueue_style( 'child-style',
+	// 	get_stylesheet_uri(),
+	// 	array( 'parenthandle' ),
+	// 	wp_get_theme()->get( 'Version' ) // This only works if you have Version defined in the style header.
+	// );
+
+	//included parent file css
+	wp_enqueue_style('parent-style',get_template_directory_uri().'/style.css');
+
+	//included child theme css
+	wp_enqueue_style('child-style',get_stylesheet_uri());
+
+	//included child theme other css file
+	wp_enqueue_style('test-css',get_stylesheet_directory_uri().'/test.css');
+}
+
+
+// echo 'hello';
