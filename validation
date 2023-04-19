@@ -1,3 +1,16 @@
+        // Reset error messages
+        $('.woocommerce-invalid').removeClass('woocommerce-invalid');
+
+        // Get input field values
+        var name = $('#billing_first_name').val().trim();
+        var email = $('#billing_email').val().trim();
+        var phone = $('#billing_phone').val().trim();
+
+        // Check for empty fields
+        if (name == '') {
+            $('#billing_first_name').addClass('woocommerce-invalid');
+        }
+
 jQuery(document).ready(function($) {
   // Add validation for name field
   $('#billing_first_name, #billing_last_name').on('input', function() {
