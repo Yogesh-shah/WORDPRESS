@@ -109,3 +109,26 @@ foreach ( $order->get_items() as $item_id => $item ) {
 }
 
  unset( $formatted_meta[$key] );
+
+
+add_filter( 'woocommerce_order_item_display_meta_value', 'my_display_order_item_meta_value', 10, 3 );
+
+function my_display_order_item_meta_value( $value, $item_id, $meta_key ) {
+    // Only display meta values for the 'color' key
+    if ( 'color' === $meta_key ) {
+        // Get the order item object
+        $item = wc_get_order_item_by_id( $item_id );
+        
+        // Get the meta value for this key
+        $meta_value = $item->get_meta( $meta_key );
+        
+        // Format the value for display
+        $formatted_value = ucwords( str_replace( '-', ' ', $meta_value ) );
+        
+        // Return the formatted value
+        return $formatted_value;
+    }
+    
+    // Return the original value for all other keys
+    return $value;
+}
