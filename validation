@@ -86,3 +86,25 @@ function validate_checkout_fields() {
     }
 
 }
+
+
+$order = wc_get_order( $order_id );
+
+foreach ( $order->get_items() as $item_id => $item ) {
+    echo '<p>Product name: ' . $item->get_name() . '</p>';
+
+    $product = $item->get_product();
+    $quantity = $item->get_quantity();
+
+    // Loop through product quantities and display
+    for ( $i = 1; $i <= $quantity; $i++ ) {
+        // Get the formatted meta data for this quantity of the item
+        $formatted_meta = $item->get_formatted_meta_data( '', $i );
+
+        // Loop through the meta data and display it
+        foreach ( $formatted_meta as $meta ) {
+            echo '<p>' . $meta->display_key . ': ' . $meta->display_value . '</p>';
+        }
+    }
+}
+
