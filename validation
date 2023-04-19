@@ -46,3 +46,30 @@ jQuery(document).ready(function($) {
     }
   });
 });
+
+
+
+//serverside
+<?php
+add_action('woocommerce_checkout_process', 'validate_checkout_fields');
+function validate_checkout_fields() {
+  if (empty($_POST['billing_first_name']) || empty($_POST['billing_last_name']) || empty($_POST['billing_email']) || empty($_POST['billing_phone'])) {
+    wc_add_notice(__('Please fill in all required fields.'), 'error');
+  }
+
+  if (!is_email($_POST['billing_email'])) {
+    wc_add_notice(__('Please enter a valid email address.'), 'error');
+  }
+
+  if (!preg_match('/^\d{10}$/', $_POST['billing_phone'])) {
+    wc_add_notice(__('Please enter a valid phone number.'), 'error');
+  }
+
+  if ( empty( $_POST['billing_last_name'] ) || strlen( $_POST['billing_last_name'] ) < 3 ) {
+        wc_add_notice(__('Please enter a valid last_name.'), 'error');
+    }
+  if ( empty( $_POST['billing_last_name'] ) || !preg_match('/^[a-zA-Z]+$/', $_POST['billing_last_name']) ) {
+        wc_add_notice( sprintf( $error_message, __('last name', 'woocommerce') ), 'error' );
+    }
+
+}
