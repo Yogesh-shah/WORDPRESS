@@ -108,3 +108,4 @@ foreach ( $order->get_items() as $item_id => $item ) {
     }
 }
 
+ unset( $formatted_meta[$key] );
