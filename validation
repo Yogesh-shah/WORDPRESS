@@ -1,0 +1,48 @@
+jQuery(document).ready(function($) {
+  // Add validation for name field
+  $('#billing_first_name, #billing_last_name').on('input', function() {
+    var name = $(this).val();
+    if (name.length < 3) {
+      $(this).addClass('invalid');
+      $(this).after('<p class="error">Please enter a valid name</p>');
+      $('html, body').animate({
+        scrollTop: $(".invalid").offset().top - 100
+      }, 500);
+    } else {
+      $(this).removeClass('invalid');
+      $('.error').remove();
+    }
+  });
+
+  // Add validation for email field
+  $('#billing_email').on('input', function() {
+    var email = $(this).val();
+    var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      $(this).addClass('invalid');
+      $(this).after('<p class="error">Please enter a valid email address</p>');
+      $('html, body').animate({
+        scrollTop: $(".invalid").offset().top - 100
+      }, 500);
+    } else {
+      $(this).removeClass('invalid');
+      $('.error').remove();
+    }
+  });
+
+  // Add validation for phone field
+  $('#billing_phone').on('input', function() {
+    var phone = $(this).val();
+    var phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phone)) {
+      $(this).addClass('invalid');
+      $(this).after('<p class="error">Please enter a valid phone number</p>');
+      $('html, body').animate({
+        scrollTop: $(".invalid").offset().top - 100
+      }, 500);
+    } else {
+      $(this).removeClass('invalid');
+      $('.error').remove();
+    }
+  });
+});
