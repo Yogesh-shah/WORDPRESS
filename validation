@@ -132,3 +132,6 @@ function my_display_order_item_meta_value( $value, $item_id, $meta_key ) {
     // Return the original value for all other keys
     return $value;
 }
+
+
+In WooCommerce, line item meta is stored in the woocommerce_order_itemmeta table
