@@ -1,0 +1,136 @@
+<form method="post">
+    <button type="submit" name="mybtn">Generate PDF</button>
+</form>
+<?php
+	// reference the Dompdf namespace
+	use Dompdf\Dompdf;
+	$plugin_path = WP_PLUGIN_DIR.'/pdf_my_plugin/includes/dompdf/autoload.inc.php';
+	// include the Dompdf library
+	require_once $plugin_path;
+	if(isset($_POST['mybtn'])){
+	    
+		ob_start(); // start output buffering
+	    // instantiate and use the dompdf class
+	    $dompdf = new Dompdf();
+	    $tabgenerate = '
+	    <!DOCTYPE html>
+	    <html>
+	    <head>
+	        <meta charset="utf-8">
+	        <meta name="viewport" content="width=device-width, initial-scale=1">
+	        <title></title>
+	        <style>
+	            table, th, td {
+	              border:1px solid black;
+	            }
+	        </style>
+	    </head>
+	    <body>
+	    <h2>A basic HTML table</h2>
+	            <table style="width:100%">
+	              <tr>
+	                <th>Company</th>
+	                <th>Contact</th>
+	                <th>Country</th>
+	              </tr>
+	              <tr>
+	                <td>Alfreds Futterkiste</td>
+	                <td>Maria Anders</td>
+	                <td>Germany</td>
+	              </tr>
+	              <tr>
+	                <td>Centro comercial Moctezuma</td>
+	                <td>Francisco Chang</td>
+	                <td>Mexico</td>
+	              </tr>
+	            </table>
+	    </body>
+	    </html>';
+	    $dompdf->loadHtml($tabgenerate);
+	    // (Optional) Setup the paper size and orientation
+	    $dompdf->setPaper('A4', 'landscape');
+	    // Render the HTML as PDF
+	    $dompdf->render();
+	    // Output the generated PDF to Browser
+	    $dompdf->stream('from_plugin_.pdf');
+	    // ob_end_flush();
+	}
+?>
+
+
+----------------------------------
+
+<?php
+/*
+	Template Name: PDF Generate Template
+*/
+?>
+
+<?php
+// reference the Dompdf namespace
+use Dompdf\Dompdf;
+
+$plugin_path = WP_PLUGIN_DIR.'/pdf_my_plugin/includes/dompdf/autoload.inc.php';
+
+// include the Dompdf library
+require_once $plugin_path;
+
+if(isset($_POST['mybtn'])){
+
+    // instantiate and use the dompdf class
+    $dompdf = new Dompdf();
+
+    $tabgenerate = '
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title></title>
+        <style>
+            table, th, td {
+              border:1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+
+    <h2>A basic HTML table</h2>
+
+            <table style="width:100%">
+              <tr>
+                <th>Company</th>
+                <th>Contact</th>
+                <th>Country</th>
+              </tr>
+              <tr>
+                <td>Alfreds Futterkiste</td>
+                <td>Maria Anders</td>
+                <td>Germany</td>
+              </tr>
+              <tr>
+                <td>Centro comercial Moctezuma</td>
+                <td>Francisco Chang</td>
+                <td>Mexico</td>
+              </tr>
+            </table>
+    </body>
+    </html>';
+
+
+    $dompdf->loadHtml($tabgenerate);
+
+    // (Optional) Setup the paper size and orientation
+    $dompdf->setPaper('A4', 'landscape');
+
+    // Render the HTML as PDF
+    $dompdf->render();
+
+    // Output the generated PDF to Browser
+    $dompdf->stream('from_template_document.pdf');
+}
+?>
+    <form method="post">
+        <button type="submit" name="mybtn">Generate PDF</button>
+    </form>
