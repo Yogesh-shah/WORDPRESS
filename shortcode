@@ -1,0 +1,24 @@
+function my_custom_products_shortcode($atts) {
+    $atts = shortcode_atts(array(
+        'category' => 'your-category-slug', // Specify the category slug
+    ), $atts);
+
+    ob_start();
+    echo do_shortcode('[product_category category="' . $atts['category'] . '"]');
+    $output = ob_get_clean();
+    return $output;
+}
+In this example, the shortcode is modified to display products from the specified category instead of displaying all products. Adjust the category slug as per your requirements.
+
+Save the changes: Save the functions.php file of your child theme.
+With these steps, you should be able to override the [products] shortcode and customize its behavior according to your needs. Remember to adjust the shortcode name and the custom logic based on your specific requirements.
+
+
+
+function my_custom_products_shortcode($atts) {
+    // Add your custom logic here
+}
+add_shortcode('products', 'my_custom_products_shortcode');
+
+
+
