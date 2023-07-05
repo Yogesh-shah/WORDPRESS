@@ -21,4 +21,101 @@ function my_custom_products_shortcode($atts) {
 add_shortcode('products', 'my_custom_products_shortcode');
 
 
+-------------------------------------------------------------------------------
+
+function custom_category1_shortcode($atts) {
+    $atts = shortcode_atts(array(
+        'category' => '',
+    ), $atts, 'category1');
+
+    if (empty($atts['category'])) {
+        return '';
+    }
+
+    $args = array(
+        'post_type' => 'product',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'product_cat',
+                'field' => 'slug',
+                'terms' => $atts['category'],
+            ),
+        ),
+    );
+
+    $products = new WP_Query($args);
+
+    ob_start();
+
+    if ($products->have_posts()) {
+        echo '<h2>' . $atts['category'] . ':</h2>';
+        echo '<ul>';
+        while ($products->have_posts()) {
+            $products->the_post();
+            echo '<li><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
+        }
+        echo '</ul>';
+    }
+
+    wp_reset_postdata();
+
+    return ob_get_clean();
+}
+add_shortcode('category1', 'custom_category1_shortcode');
+
+
+function custom_category2_shortcode($atts) {
+    $atts = shortcode_atts(array(
+        'category' => '',
+    ), $atts, 'category2');
+
+    if (empty($atts['category'])) {
+        return '';
+    }
+
+    $args = array(
+        'post_type' => 'product',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'product_cat',
+                'field' => 'slug',
+                'terms' => $atts['category'],
+            ),
+        ),
+    );
+
+    $products = new WP_Query($args);
+
+    ob_start();
+
+    if ($products->have_posts()) {
+        echo '<h2>' . $atts['category'] . ':</h2>';
+        echo '<ul>';
+        while ($products->have_posts()) {
+            $products->the_post();
+            echo '<li><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
+        }
+        echo '</ul>';
+    }
+
+    wp_reset_postdata();
+
+    return ob_get_clean();
+}
+add_shortcode('category2', 'custom_category2_shortcode');
+
+
+function custom_both_categories_shortcode() {
+    ob_start();
+
+    echo do_shortcode('[category1 category="category-1-slug"]');
+    echo do_shortcode('[category2 category="category-2-slug"]');
+
+    return ob_get_clean();
+}
+add_shortcode('both_categories', 'custom_both_categories_shortcode');
+
+
 
