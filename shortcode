@@ -118,6 +118,7 @@ function custom_both_categories_shortcode() {
 add_shortcode('both_categories', 'custom_both_categories_shortcode');
 
 -----------------------------------------------------------------------------
+===============================================================================================
 
 
 // Custom shortcode to display recently viewed products
