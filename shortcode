@@ -117,5 +117,109 @@ function custom_both_categories_shortcode() {
 }
 add_shortcode('both_categories', 'custom_both_categories_shortcode');
 
+-----------------------------------------------------------------------------
+
+
+// Custom shortcode to display recently viewed products
+// function recently_viewed_products_shortcode() {
+//     global $woocommerce;
+
+//     // Get the product IDs from the WooCommerce session
+//     $viewed_products = ! empty( $_COOKIE['woocommerce_recently_viewed'] ) ? (array) explode( '|', $_COOKIE['woocommerce_recently_viewed'] ) : array();
+
+//     // Get the actual product objects from the product IDs
+//     $products = array_map( 'wc_get_product', $viewed_products );
+
+//     // Output the product information
+//     $output = '<ul class="recently-viewed-products">';
+//     foreach ( $products as $product ) {
+//         if ( $product ) {
+//             $output .= '<li><a href="' . esc_url( get_permalink( $product->get_id() ) ) . '">' . esc_html( $product->get_name() ) . '</a></li>';
+//         }
+//     }
+//     $output .= '</ul>';
+
+//     return $output;
+// }
+// add_shortcode( 'recently_viewed_products', 'recently_viewed_products_shortcode' );
+
+
+// Custom shortcode to display recently viewed products
+function recently_viewed_products_shortcode() {
+    global $woocommerce, $product;
+
+    // Get the product IDs from the WooCommerce session
+    $viewed_products = ! empty( $_COOKIE['woocommerce_recently_viewed'] ) ? (array) explode( '|', $_COOKIE['woocommerce_recently_viewed'] ) : array();
+
+    // Get the actual product objects from the product IDs
+    $products = array_map( 'wc_get_product', $viewed_products );
+
+    // Check if there are fewer than 12 recently viewed products
+    if ( count( $products ) < 12 ) {
+        // Get the category IDs of the viewed products
+        $category_ids = array();
+        foreach ( $products as $product ) {
+            if ( $product ) {
+                $category_ids = array_merge( $category_ids, $product->get_category_ids() );
+            }
+        }
+        $category_ids = array_unique( $category_ids );
+
+        // Get additional products from the same categories
+        $args = array(
+            'post_type'      => 'product',
+            'post_status'    => 'publish',
+            'posts_per_page' => 12 - count( $products ), // Number of additional products to display
+            'orderby'        => 'rand',
+            'tax_query'      => array(
+                array(
+                    'taxonomy' => 'product_cat',
+                    'field'    => 'term_id',
+                    'terms'    => $category_ids,
+                ),
+            ),
+        );
+
+        $additional_products = new WP_Query( $args );
+
+        // Shuffle the additional products
+        $additional_products_array = $additional_products->get_posts();
+        shuffle( $additional_products_array );
+
+        // Merge additional products with recently viewed products
+        $merged_products = array_merge( $products, $additional_products_array );
+
+        // Get the actual product objects from the merged products
+        $products = array_map( 'wc_get_product', $merged_products );
+    }
+
+    // Output the product information
+    $output = '';
+
+    if ( ! empty( $products ) ) {
+        $output .= '<ul class="recently-viewed-products">';
+        foreach ( $products as $product ) {
+            if ( $product ) {
+                $output .= '<li><a href="' . esc_url( get_permalink( $product->get_id() ) ) . '">' . esc_html( $product->get_name() ) . '</a></li>';
+            }
+        }
+        $output .= '</ul>';
+    } else {
+        $output .= '<p>No recently viewed products.</p>';
+    }
+
+    return $output;
+}
+add_shortcode( 'recently_viewed_products', 'recently_viewed_products_shortcode' );
+
+
+
+// Hook the shortcode output after the related products
+function display_recently_viewed_products() {
+    echo do_shortcode('[recently_viewed_products]');
+}
+add_action('woocommerce_after_single_product_summary', 'display_recently_viewed_products', 20);
+
+
 
 
